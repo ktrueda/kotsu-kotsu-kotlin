@@ -7,15 +7,20 @@ fun main() {
     val text = "I am an NLPer"
     val words = text.split(" ")
 
-    println(ngram(words, 2))
-    println(ngram(text.toList(), 2))
+    println(ngramStr(words, 2))
+    println(ngramChar(text.toList(), 2))
 
 
 }
 
-fun <T> ngram(input: List<T>, n: Int): List<T> {
+fun ngramStr(input: List<String>, n: Int): List<String> {
     val size = input.size
     return IntRange(0, size - n)
-        .map { e -> input.subList(e, e + n) }
-        .flatten()
+        .map { e -> input.subList(e, e + n).joinToString("") }
+}
+
+fun ngramChar(input: List<Char>, n: Int): List<String> {
+    val size = input.size
+    return IntRange(0, size - n)
+        .map { e -> input.subList(e, e + n).joinToString("") }
 }
