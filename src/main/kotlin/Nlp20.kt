@@ -14,7 +14,7 @@ fun main() {
     println(wikiPages["United Kingdom"])
 }
 
-fun fetchEnWikiCountries(): Map<String, String> {
+fun fetchEnWikiCountries(): Map<String, WikiPage> {
     val response = JSON_URL.httpGet().response().second
     val unzipped = GZIPInputStream(response.data.inputStream())
         .bufferedReader(UTF_8)
@@ -23,7 +23,7 @@ fun fetchEnWikiCountries(): Map<String, String> {
         .filter { it != "" }
         .map {
             val obj = Json.decodeFromString<WikiPage>(it)
-            obj.title to obj.text
+            obj.title to obj
         }.toMap()
 }
 
