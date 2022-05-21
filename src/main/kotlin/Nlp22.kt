@@ -5,9 +5,11 @@
 fun main() {
     val wikiPages = fetchEnWikiCountries()
     val ukPage = wikiPages["United Kingdom"]!!
+//    println(ukPage.text)
+    val categoryRegex = Regex("\\[\\[Category:(.*)\\]\\]*")
     val categoryLines = ukPage.text
         .split("\n")
-        .filter { it.startsWith("[[Category:") }
+        .filter { categoryRegex.matches(it) }
         .map {
             "\\[\\[Category:(.*)\\]\\]".toRegex()
                 .find(it)!!.groups[1]!!.value.replace("|", "")
