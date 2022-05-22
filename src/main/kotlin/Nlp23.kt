@@ -6,21 +6,17 @@
 fun main() {
     val wikiPages = fetchEnWikiCountries()
     val ukPage = wikiPages["United Kingdom"]!!
-    val sectionNames = ukPage.text
-        .split("\n")
-        .filter {
-            "=(.*)=".toRegex().matches(it)
+    println(ukPage.text)
+    val sectionRegex = "^(={1,3})+(\\w*)(={1,3})$".toRegex(RegexOption.MULTILINE)
+    sectionRegex
+        .findAll(ukPage.text)
+        .map {
+            Section(
+                name = it.groupValues[2],
+                level = 4 - it.groupValues[1].length
+            )
         }
-        .mapNotNull {
-            when {
-                it.startsWith("===") -> Section(it.substring(3, it.length - 3), 3)
-                it.startsWith("==") -> Section(it.substring(2, it.length - 2), 2)
-                it.startsWith("=") -> Section(it.substring(1, it.length - 1), 1)
-                else -> null
-            }
-        }
-
-    println(sectionNames)
+        .forEach { println(it) }
 }
 
 data class Section(val name: String, val level: Int)
